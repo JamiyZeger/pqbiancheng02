@@ -17,6 +17,8 @@ LOGS_FILE = '/app/data/logs.xlsx'
 
 # 邮箱配置
 app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.qiye.aliyun.com')
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME', 'AlexPeng@careerintlinc.com')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD', 'N651LvEanhgDUpXP')
 app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 465))
 app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL', 'True') == 'True'
 app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
@@ -158,7 +160,7 @@ def handle_upload():
 
 def send_alert_email(count):
     try:
-        msg = Message('库存预警', sender=app.config['MAIL_USERNAME'], recipients=['pq2008317@163.com'])
+        msg = Message('库存预警', sender=app.config['MAIL_USERNAME'], recipients=[os.getenv('ADMIN_EMAIL', 'pq2008317@163.com')])
         msg.body = f"剩余可用账号数量：{count}，请及时补充！"
         mail.send(msg)
     except Exception as e:
@@ -176,8 +178,8 @@ def send_daily_logs():
         # 创建邮件
         msg = Message('每日日志报告', 
                      sender=app.config['MAIL_USERNAME'],
-                     recipients=['alex533@vip.163.com'],
-                     cc=['pq2008317@163.com'])
+                     recipients=[os.getenv('TEST_RECEIVER_EMAIL', 'alex533@vip.163.com')],
+                     cc=[os.getenv('ADMIN_EMAIL', 'pq2008317@163.com')])
         msg.body = '附件为当日操作日志'
         
         # 添加Excel附件
